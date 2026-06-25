@@ -1,0 +1,25 @@
+CREATE OR REPLACE FUNCTION update_ticket_stats()
+RETURNS TRIGGER AS $$
+DECLARE
+    tour_price DECIMAL(10,2);
+    customer_name_val VARCHAR(100);
+BEGIN
+    -- Получаем цену тура
+    SELECT price INTO tour_price FROM tours WHERE id = NEW.tour_id;
+    
+    -- Получаем имя заказчика (из таблицы customers)
+    SELECT name INTO customer_name_val FROM customers WHERE id = NEW.customer_id;
+    IF customer_name_val IS NULL THEN
+        customer_name_val := NEW.customer_name;
+    END IF;
+    
+    -- Обновляем статистику
+    INSERT INTO customer_ticket_stats (customer_id, customer_name, total_tickets, total_amount)
+    VALUES (NEW.customer_id, customer_name_val, 1, COALESCE(tour_price, 0))
+    ON CONFLICT (customer_id) DO UPDATE
+    SET total_tickets = customer_ticket_stats.total_tickets + 1,
+        total_amount = customer_ticket_stats.total_amount + EXCLUDED.total_amount;
+    
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;

@@ -1,0 +1,55 @@
+<form method="post">
+                {% csrf_token %}
+                
+                <div class="form-group">
+                    <label><i class="fas fa-user"></i> Имя пользователя</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-user"></i>
+                        <input type="text" name="username" placeholder="Придумайте имя пользователя" required autofocus>
+                    </div>
+                    {% if form.username.errors %}
+                        <ul class="errorlist">
+                            {% for error in form.username.errors %}
+                                <li><i class="fas fa-exclamation-circle"></i> {{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                    <span class="helptext">{{ form.username.help_text }}</span>
+                </div>
+                
+                <div class="form-group">
+                    <label><i class="fas fa-lock"></i> Пароль</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" name="password1" placeholder="Придумайте пароль" required>
+                    </div>
+                    {% if form.password1.errors %}
+                        <ul class="errorlist">
+                            {% for error in form.password1.errors %}
+                                <li><i class="fas fa-exclamation-circle"></i> {{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                    <span class="helptext">{{ form.password1.help_text }}</span>
+                </div>
+                
+                <div class="form-group">
+                    <label><i class="fas fa-lock"></i> Подтверждение пароля</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" name="password2" placeholder="Повторите пароль" required>
+                    </div>
+                    {% if form.password2.errors %}
+                        <ul class="errorlist">
+                            {% for error in form.password2.errors %}
+                                <li><i class="fas fa-exclamation-circle"></i> {{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                    <span class="helptext">{{ form.password2.help_text }}</span>
+                </div>
+                
+                <button type="submit" class="btn-register">
+                    <i class="fas fa-check-circle"></i> Зарегистрироваться
+                </button>
+            </form>
